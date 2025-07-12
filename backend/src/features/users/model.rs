@@ -1,14 +1,15 @@
 use serde::Serialize;
+use utoipa::ToSchema;
 use uuid::Uuid;
 
-#[derive(Serialize)]
+#[derive(Serialize, ToSchema)]
 pub struct UserListItem {
     pub id: Uuid,
     pub full_name: String,
     pub role: UserRole,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, ToSchema)]
 pub struct UserDetail {
     pub id: Uuid,
     pub full_name: String,
@@ -16,7 +17,7 @@ pub struct UserDetail {
     pub role: UserRole,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, ToSchema)]
 #[serde(rename_all = "UPPERCASE")]
 pub enum UserRole {
     Admin,

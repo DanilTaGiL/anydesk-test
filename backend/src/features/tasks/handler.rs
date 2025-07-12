@@ -2,6 +2,14 @@ use axum::{Json, response::IntoResponse, routing::{get, post}, Router};
 use uuid::Uuid;
 use super::model::*;
 
+#[utoipa::path(
+    get,
+    path = "/tasks",
+    tag = "Tasks",
+    responses(
+        (status = 200, description = "List tasks", body = [TaskListItem])
+    )
+)]
 pub async fn list_tasks() -> impl IntoResponse {
     Json(vec![
         TaskListItem {
@@ -17,6 +25,17 @@ pub async fn list_tasks() -> impl IntoResponse {
     ])
 }
 
+#[utoipa::path(
+    get,
+    path = "/task/{id}",
+    tag = "Tasks",
+    params(
+        ("id" = i32, Path, description = "Task ID")
+    ),
+    responses(
+        (status = 200, body = TaskDetail)
+    )
+)]
 pub async fn get_task(axum::extract::Path(id): axum::extract::Path<i32>) -> impl IntoResponse {
     Json(TaskDetail {
         id,
@@ -28,6 +47,15 @@ pub async fn get_task(axum::extract::Path(id): axum::extract::Path<i32>) -> impl
     })
 }
 
+#[utoipa::path(
+    post,
+    path = "/task",
+    tag = "Tasks",
+    request_body = TaskCreate,
+    responses(
+        (status = 201, body = TaskCreate)
+    )
+)]
 pub async fn create_task(Json(payload): Json<TaskDetail>) -> impl IntoResponse {
     (axum::http::StatusCode::CREATED, Json(payload))
 }

@@ -1,9 +1,13 @@
+mod apidoc;
 mod features;
 
+use crate::apidoc::ApiDoc;
 use crate::features::{tasks, users};
 use axum::{Router, serve};
 use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
 
 #[tokio::main]
 async fn main() {
@@ -15,8 +19,9 @@ async fn main() {
 
     /* ───── Роуты ───── */
     let app = Router::new()
-        .merge(users::router())
-        .merge(tasks::router());
+        .merge(users::handler::router())
+        .merge(tasks::handler::router())
+        .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()));
 
     /* ───── Слушатель и запуск ───── */
     let listener = TcpListener::bind("0.0.0.0:8888")

@@ -1,4 +1,2 @@
-mod model;
-mod handler;
-
-pub use handler::router;
+pub mod model;
+pub mod handler;
