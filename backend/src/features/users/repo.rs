@@ -15,7 +15,7 @@ pub async fn get_all(pool: &PgPool) -> anyhow::Result<Vec<UserDAO>> {
     Ok(rows)
 }
 
-pub async fn get_by_id(pool: &PgPool, id: Uuid) -> anyhow::Result<UserDAO> {
+pub async fn get_by_id(pool: &PgPool, id: Uuid) -> anyhow::Result<Option<UserDAO>> {
     let row = sqlx::query_as!(
         UserDAO,
         r#"
@@ -25,7 +25,7 @@ pub async fn get_by_id(pool: &PgPool, id: Uuid) -> anyhow::Result<UserDAO> {
         "#,
         id
     )
-    .fetch_one(pool)
+    .fetch_optional(pool)
     .await?;
     Ok(row)
 }

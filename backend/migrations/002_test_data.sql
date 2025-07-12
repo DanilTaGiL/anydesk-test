@@ -1,5 +1,5 @@
 INSERT INTO users (id, first_name, last_name, headline, role) VALUES
-('00000000-0000-0000-0000-000000000001', 'Danil',  'Suiagin', 'Backend Ninja', 'ADMIN'),
+('00000000-0000-0000-0000-000000000001', 'Danil',  'Suiagin', 'Fullstack Ninja', 'ADMIN'),
 ('00000000-0000-0000-0000-000000000002', 'Alice',  'Doe',     'QA Lead',      'SUPPORT'),
 ('00000000-0000-0000-0000-000000000003', 'Bob',    'Smith',   'Frontend Dev', 'SUPPORT'),
 ('00000000-0000-0000-0000-000000000004', 'Carol',  'Jones',   NULL,           'SUPPORT'),
