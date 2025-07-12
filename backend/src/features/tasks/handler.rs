@@ -31,7 +31,8 @@ pub async fn all_tasks(
     tag = "Tasks",
     summary = "Detailed description of specific task",
     responses(
-        (status = 200, body = TaskDetailsDTO)
+        (status = 200, body = TaskDetailsDTO),
+        (status = 404, description = "Task with {id} does not exist")
     )
 )]
 pub async fn get_task(
@@ -48,7 +49,8 @@ pub async fn get_task(
     summary = "Create new task",
     request_body = TaskCreateDTO,
     responses(
-        (status = 201, body = TaskDetailsDTO)
+        (status = 201, body = TaskDetailsDTO),
+        (status = 400, description = "Referenced user does not exist")
     )
 )]
 pub async fn create_task(
@@ -64,9 +66,11 @@ pub async fn create_task(
     path = "/task/{id}",
     tag = "Tasks",
     summary = "Update existing task",
-    request_body = TaskListItemDTO,
+    request_body = TaskUpdateDTO,
     responses(
-        (status = 200, body = TaskListItemDTO)
+        (status = 200, body = TaskDetailsDTO),
+        (status = 400, description = "Referenced user does not exist"),
+        (status = 404, description = "Task with {id} does not exist")
     )
 )]
 pub async fn update_task(
@@ -82,9 +86,9 @@ pub async fn update_task(
     path = "/task/{id}",
     tag = "Tasks",
     summary = "Delete specific task",
-    request_body = TaskListItemDTO,
     responses(
-        (status = 200, body = TaskListItemDTO)
+        (status = 200, body = TaskListItemDTO),
+        (status = 404, description = "Task with {id} does not exist")
     )
 )]
 pub async fn delete_task(

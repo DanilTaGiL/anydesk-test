@@ -1,3 +1,4 @@
+use crate::api_error::ApiError;
 use crate::features::tasks::model::*;
 use sqlx::{PgPool, query_as};
 
@@ -27,7 +28,7 @@ pub async fn get_task_by_id(pool: &PgPool, id: i32) -> sqlx::Result<Option<TaskD
     .await
 }
 
-pub async fn create_task(pool: &PgPool, dto: TaskCreateDTO) -> sqlx::Result<TaskDAO> {
+pub async fn create_task(pool: &PgPool, dto: TaskCreateDTO) -> sqlx::Result<TaskDAO, ApiError> {
     query_as!(
         TaskDAO,
         r#"
@@ -43,9 +44,14 @@ pub async fn create_task(pool: &PgPool, dto: TaskCreateDTO) -> sqlx::Result<Task
     )
     .fetch_one(pool)
     .await
+    .map_err(ApiError::from)
 }
 
-pub async fn update_task(pool: &PgPool, id: i32, dto: TaskUpdateDTO) -> sqlx::Result<Option<TaskDAO>> {
+pub async fn update_task(
+    pool: &PgPool,
+    id: i32,
+    dto: TaskUpdateDTO,
+) -> sqlx::Result<Option<TaskDAO>, ApiError> {
     // Use COALESCE to keep old value when field is None
     query_as!(
         TaskDAO,
@@ -67,6 +73,7 @@ pub async fn update_task(pool: &PgPool, id: i32, dto: TaskUpdateDTO) -> sqlx::Re
     )
     .fetch_optional(pool)
     .await
+    .map_err(ApiError::from)
 }
 
 pub async fn delete_task(pool: &PgPool, id: i32) -> sqlx::Result<u64> {
