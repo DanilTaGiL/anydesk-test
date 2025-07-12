@@ -1,18 +1,9 @@
-use axum::{routing::get, Json, Router, response::IntoResponse, serve};
-use serde::Serialize;
+mod features;
+
+use crate::features::{tasks, users};
+use axum::{Router, serve};
 use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-
-// Простая структура ответа
-#[derive(Serialize)]
-struct HealthResp {
-    status: &'static str,
-}
-
-// Хендлер GET /health
-async fn healthcheck() -> impl IntoResponse {
-    Json(HealthResp { status: "ok" })
-}
 
 #[tokio::main]
 async fn main() {
@@ -24,7 +15,8 @@ async fn main() {
 
     /* ───── Роуты ───── */
     let app = Router::new()
-        .route("/health", get(healthcheck));
+        .merge(users::router())
+        .merge(tasks::router());
 
     /* ───── Слушатель и запуск ───── */
     let listener = TcpListener::bind("0.0.0.0:8888")
