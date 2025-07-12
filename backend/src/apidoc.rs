@@ -3,7 +3,7 @@ use utoipa::OpenApi;
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        crate::features::users::handler::list_users,
+        crate::features::users::handler::users_list,
         crate::features::users::handler::get_user,
         crate::features::tasks::handler::list_tasks,
         crate::features::tasks::handler::get_task,
@@ -11,8 +11,8 @@ use utoipa::OpenApi;
     ),
     components(
         schemas(
-            crate::features::users::model::UserListItem,
-            crate::features::users::model::UserDetail,
+            crate::features::users::model::UserListItemDTO,
+            crate::features::users::model::UserDetailsDTO,
             crate::features::users::model::UserRole,
             crate::features::tasks::model::TaskListItem,
             crate::features::tasks::model::TaskDetail,

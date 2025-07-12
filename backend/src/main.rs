@@ -1,5 +1,7 @@
 mod apidoc;
 mod features;
+mod app_state;
+mod api_error;
 
 use crate::apidoc::ApiDoc;
 use crate::features::{tasks, users};
@@ -10,24 +12,33 @@ use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
 #[tokio::main]
-async fn main() {
-    /* ───── Логирование ───── */
+async fn main() -> anyhow::Result<()> {
+    /* envs */
+    dotenvy::dotenv().ok();
+    let database_url = std::env::var("DATABASE_URL")?;
+
+    /* state */
+    let state = app_state::AppState::new(&database_url).await?;
+
+    /* logs */
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::new("info")) // RUST_LOG=debug cargo run
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    /* ───── Роуты ───── */
+    /* routing */
     let app = Router::new()
         .merge(users::handler::router())
         .merge(tasks::handler::router())
-        .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()));
+        .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
+        .with_state(state.clone());
 
-    /* ───── Слушатель и запуск ───── */
+    /* listener and start up */
     let listener = TcpListener::bind("0.0.0.0:8888")
         .await
         .expect("Failed to bind");
     tracing::info!("🚀  Server listening on {}", listener.local_addr().unwrap());
 
     serve(listener, app).await.expect("Server error");
+    Ok(())
 }

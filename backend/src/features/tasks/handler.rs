@@ -1,5 +1,6 @@
 use axum::{Json, response::IntoResponse, routing::{get, post}, Router};
 use uuid::Uuid;
+use crate::app_state::AppState;
 use super::model::*;
 
 #[utoipa::path(
@@ -60,7 +61,7 @@ pub async fn create_task(Json(payload): Json<TaskDetail>) -> impl IntoResponse {
     (axum::http::StatusCode::CREATED, Json(payload))
 }
 
-pub fn router() -> Router {
+pub fn router() -> Router<AppState> {
     Router::new()
         .route("/tasks", get(list_tasks))
         .route("/task/{id}", get(get_task))
