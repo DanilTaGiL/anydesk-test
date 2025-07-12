@@ -1,36 +1,77 @@
 use serde::{Deserialize, Serialize};
+use sqlx::Type;
 use utoipa::ToSchema;
 use uuid::Uuid;
 
+/* Database model */
 #[derive(Serialize, Deserialize, ToSchema)]
-pub struct TaskCreate {
+pub struct TaskDAO {
+    pub id: i32,
     pub title: String,
     pub category: TaskCategory,
-    pub description: String,
     pub creator_id: Uuid,
-    pub assigned_to: Uuid,
+    pub description: Option<String>,
+    pub assigned_to: Option<Uuid>,
+}
+
+/* DTO models */
+// create / update
+#[derive(Deserialize, ToSchema)]
+pub struct TaskCreateDTO {
+    pub title: String,
+    pub category: TaskCategory,
+    pub description: Option<String>,
+    pub creator_id: Uuid,
+    pub assigned_to: Option<Uuid>,
+}
+
+#[derive(Deserialize, ToSchema)]
+pub struct TaskUpdateDTO {
+    pub title: Option<String>,
+    pub category: Option<TaskCategory>,
+    pub description: Option<String>,
+    pub assigned_to: Option<Uuid>,
+}
+
+// outbound
+#[derive(Serialize, ToSchema)]
+pub struct TaskListItemDTO {
+    pub id: i32,
+    pub title: String,
+    pub category: TaskCategory,
 }
 
 #[derive(Serialize, ToSchema)]
-pub struct TaskListItem {
+pub struct TaskDetailsDTO {
     pub id: i32,
     pub title: String,
     pub category: TaskCategory,
-}
-
-#[derive(Serialize, Deserialize, ToSchema)]
-pub struct TaskDetail {
-    pub id: i32,
-    pub title: String,
-    pub category: TaskCategory,
-    pub description: String,
+    pub description: Option<String>,
     pub creator_id: Uuid,
-    pub assigned_to: Uuid,
+    pub assigned_to: Option<Uuid>,
 }
 
-#[derive(Serialize, Deserialize, ToSchema)]
+/* enums */
+#[derive(Serialize, Deserialize, ToSchema, Type)]
+#[sqlx(type_name = "task_category", rename_all = "UPPERCASE")]
 #[serde(rename_all = "UPPERCASE")]
 pub enum TaskCategory {
-    Bug,
-    Task,
+    BUG,
+    TASK,
+    RESEARCH
+}
+
+/* Converters */
+impl From<TaskDAO> for TaskListItemDTO {
+    fn from(x: TaskDAO) -> Self {
+        Self { id: x.id, title: x.title, category: x.category }
+    }
+}
+impl From<TaskDAO> for TaskDetailsDTO {
+    fn from(x: TaskDAO) -> Self {
+        Self {
+            id: x.id, title: x.title, category: x.category,
+            description: x.description, creator_id: x.creator_id, assigned_to: x.assigned_to,
+        }
+    }
 }

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
+use sqlx::Type;
 use utoipa::ToSchema;
 use uuid::Uuid;
-use sqlx::Type;
 
 /* Database model */
 #[derive(Serialize, Deserialize, ToSchema)]
@@ -29,13 +29,15 @@ pub struct UserDetailsDTO {
     pub role: UserRole,
 }
 
+/* enums */
 #[derive(Serialize, Deserialize, ToSchema, Type)]
-#[sqlx(type_name = "TEXT")]
+#[sqlx(type_name = "user_role")]
 #[sqlx(rename_all = "UPPERCASE")]
 #[serde(rename_all = "UPPERCASE")]
 pub enum UserRole {
-    Admin,
-    Support,
+    ADMIN,
+    SUPPORT,
+    DEVELOPER
 }
 
 /* Converters */

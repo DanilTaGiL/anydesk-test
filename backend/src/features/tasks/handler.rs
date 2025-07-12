@@ -1,69 +1,105 @@
-use axum::{Json, response::IntoResponse, routing::{get, post}, Router};
-use uuid::Uuid;
-use crate::app_state::AppState;
 use super::model::*;
+use crate::api_error::ApiError;
+use crate::app_state::AppState;
+use crate::features::tasks::service;
+use axum::extract::{Path, State};
+use axum::http::StatusCode;
+use axum::routing::{delete, put};
+use axum::{
+    Json, Router,
+    routing::{get, post},
+};
 
 #[utoipa::path(
     get,
-    path = "/tasks",
+    path = "/task/all",
     tag = "Tasks",
+    summary = "Short description of all tasks",
     responses(
-        (status = 200, description = "List tasks", body = [TaskListItem])
+        (status = 200, description = "List tasks", body = [TaskListItemDTO])
     )
 )]
-pub async fn list_tasks() -> impl IntoResponse {
-    Json(vec![
-        TaskListItem {
-            id: 1,
-            title: "Found some bug".into(),
-            category: TaskCategory::Bug,
-        },
-        TaskListItem {
-            id: 2,
-            title: "Need for Fix: Most Wanted".into(),
-            category: TaskCategory::Task,
-        },
-    ])
+pub async fn all_tasks(
+    State(state): State<AppState>,
+) -> Result<Json<Vec<TaskListItemDTO>>, ApiError> {
+    Ok(Json(service::get_all_tasks(&state).await?))
 }
 
 #[utoipa::path(
     get,
     path = "/task/{id}",
     tag = "Tasks",
-    params(
-        ("id" = i32, Path, description = "Task ID")
-    ),
+    summary = "Detailed description of specific task",
     responses(
-        (status = 200, body = TaskDetail)
+        (status = 200, body = TaskDetailsDTO)
     )
 )]
-pub async fn get_task(axum::extract::Path(id): axum::extract::Path<i32>) -> impl IntoResponse {
-    Json(TaskDetail {
-        id,
-        title: "Found some bug".into(),
-        category: TaskCategory::Bug,
-        description: "some long description".into(),
-        creator_id: Uuid::new_v4(),
-        assigned_to: Uuid::new_v4(),
-    })
+pub async fn get_task(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<TaskDetailsDTO>, ApiError> {
+    Ok(Json(service::get_task(&state, id).await?))
 }
 
 #[utoipa::path(
     post,
     path = "/task",
     tag = "Tasks",
-    request_body = TaskCreate,
+    summary = "Create new task",
+    request_body = TaskCreateDTO,
     responses(
-        (status = 201, body = TaskCreate)
+        (status = 201, body = TaskDetailsDTO)
     )
 )]
-pub async fn create_task(Json(payload): Json<TaskDetail>) -> impl IntoResponse {
-    (axum::http::StatusCode::CREATED, Json(payload))
+pub async fn create_task(
+    State(state): State<AppState>,
+    Json(dto): Json<TaskCreateDTO>,
+) -> Result<(StatusCode, Json<TaskDetailsDTO>), ApiError> {
+    let created = service::create_task(&state, dto).await?;
+    Ok((StatusCode::CREATED, Json(created)))
+}
+
+#[utoipa::path(
+    put,
+    path = "/task/{id}",
+    tag = "Tasks",
+    summary = "Update existing task",
+    request_body = TaskListItemDTO,
+    responses(
+        (status = 200, body = TaskListItemDTO)
+    )
+)]
+pub async fn update_task(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+    Json(dto): Json<TaskUpdateDTO>,
+) -> Result<Json<TaskDetailsDTO>, ApiError> {
+    Ok(Json(service::update_task(&state, id, dto).await?))
+}
+
+#[utoipa::path(
+    delete,
+    path = "/task/{id}",
+    tag = "Tasks",
+    summary = "Delete specific task",
+    request_body = TaskListItemDTO,
+    responses(
+        (status = 200, body = TaskListItemDTO)
+    )
+)]
+pub async fn delete_task(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<StatusCode, ApiError> {
+    service::delete_task(&state, id).await?;
+    Ok(StatusCode::NO_CONTENT)
 }
 
 pub fn router() -> Router<AppState> {
     Router::new()
-        .route("/tasks", get(list_tasks))
-        .route("/task/{id}", get(get_task))
+        .route("/task/all", get(all_tasks))
         .route("/task", post(create_task))
+        .route("/task/{id}", get(get_task))
+        .route("/task/{id}", put(update_task))
+        .route("/task/{id}", delete(delete_task))
 }

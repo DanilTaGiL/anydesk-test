@@ -8,32 +8,32 @@ use uuid::Uuid;
 
 #[utoipa::path(
     get,
-    path = "/users",
+    path = "/user/all",
     tag = "Users",
+    summary = "Short description of all users",
     responses(
         (status = 200, description = "List users", body = [UserListItemDTO])
     )
 )]
-pub async fn users_list(State(state): State<AppState>) -> Result<Json<Vec<UserListItemDTO>>, ApiError> {
-    let result = service::users_list(&state).await?;
-    Ok(Json(result))
+pub async fn all_users(State(state): State<AppState>) -> Result<Json<Vec<UserListItemDTO>>, ApiError> {
+    Ok(Json(service::get_all(&state).await?))
 }
 
 #[utoipa::path(
     get,
     path = "/user/{id}",
     tag = "Users",
+    summary = "Detailed description of specific user",
     responses(
         (status = 200, description = "Get user by id", body = [UserDetailsDTO])
     )
 )]
 pub async fn get_user(State(state): State<AppState>, Path(id): Path<Uuid>) -> Result<Json<UserDetailsDTO>, ApiError> {
-    let result = service::get_user_details(&state, id).await?;
-    Ok(Json(result))
+    Ok(Json(service::get_user_details(&state, id).await?))
 }
 
 pub fn router() -> Router<AppState> {
     Router::new()
-        .route("/users", get(users_list))
+        .route("/user/all", get(all_users))
         .route("/user/{id}", get(get_user))
 }
