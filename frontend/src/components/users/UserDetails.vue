@@ -18,8 +18,7 @@ const props = defineProps<{ details?: UserDetails }>()
       <p v-else><i class="text-medium-emphasis">Empty</i></p>
     </div>
   </div>
-  <!--  TODO: skeleton?-->
-  <div v-else>Loading...</div>
+  <v-skeleton-loader v-else type="paragraph"></v-skeleton-loader>
 </template>
 
 <style scoped>
