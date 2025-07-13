@@ -31,7 +31,7 @@ onMounted(async () => {
         <v-expansion-panel-title>
           <div class="user-list-item--title">
             <p><b>{{ user.fullName }}</b></p>
-            <v-badge color="warning" inline :content="user.role" />
+            <v-chip color="orange-darken-4" variant="outlined" size="small" label>{{user.role}}</v-chip>
           </div>
         </v-expansion-panel-title>
 
@@ -61,8 +61,9 @@ onMounted(async () => {
 
 .user-list-item--title {
   display: flex;
-  width: 100%;
+  width: 90%;
   justify-content: space-between;
   align-items: center;
+
 }
 </style>
