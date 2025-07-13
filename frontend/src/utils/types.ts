@@ -1,6 +1,11 @@
 export type UsersState = {
   userList: UserListItem[]
+  userDetails: {
+    [id: string]: UserDetails
+  }
 }
+
+export type UserRole = 'ADMIN' | 'SUPPORT' | 'DEVELOPER'
 
 export type UserListItem = {
   id: string
@@ -8,4 +13,11 @@ export type UserListItem = {
   role: UserRole
 }
 
-export type UserRole = 'ADMIN' | 'SUPPORT' | 'DEVELOPER'
+
+export type UserDetails = {
+  id: string
+  firstName: string
+  lastName: string
+  headline?: string
+  role: UserRole
+}

@@ -26,7 +26,8 @@ pub struct UserListItemDTO {
 #[serde(rename_all = "camelCase")]
 pub struct UserDetailsDTO {
     pub id: Uuid,
-    pub full_name: String,
+    pub first_name: String,
+    pub last_name: String,
     pub headline: String,
     pub role: UserRole,
 }
@@ -57,7 +58,8 @@ impl From<UserDAO> for UserDetailsDTO {
     fn from(dao: UserDAO) -> Self {
         Self {
             id: dao.id,
-            full_name: format!("{} {}", dao.first_name, dao.last_name),
+            first_name: dao.first_name,
+            last_name: dao.last_name,
             headline: dao.headline.unwrap_or_default(),
             role: dao.role,
         }
