@@ -17,6 +17,7 @@ pub struct TaskDAO {
 /* DTO models */
 // create / update
 #[derive(Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct TaskCreateDTO {
     pub title: String,
     pub category: TaskCategory,
@@ -26,6 +27,7 @@ pub struct TaskCreateDTO {
 }
 
 #[derive(Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct TaskUpdateDTO {
     pub title: Option<String>,
     pub category: Option<TaskCategory>,
@@ -42,6 +44,7 @@ pub struct TaskListItemDTO {
 }
 
 #[derive(Serialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct TaskDetailsDTO {
     pub id: i32,
     pub title: String,

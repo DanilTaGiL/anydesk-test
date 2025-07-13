@@ -15,6 +15,7 @@ pub struct UserDAO {
 
 /* DTO models */
 #[derive(Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct UserListItemDTO {
     pub id: Uuid,
     pub full_name: String,
@@ -22,6 +23,7 @@ pub struct UserListItemDTO {
 }
 
 #[derive(Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct UserDetailsDTO {
     pub id: Uuid,
     pub full_name: String,
