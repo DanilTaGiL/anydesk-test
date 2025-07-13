@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import type { UserDetails, UserListItem, UsersState } from '@/utils/types.ts'
 import { api } from '@/utils/api.ts'
+import type { UserDetails, UserListItem, UsersState } from '@/utils/types/users.ts'
 
 export const useUsersStore = defineStore('users', {
   state: (): UsersState => ({
     userList: [],
-    userDetails: {}
+    userDetails: {},
   }),
 
   actions: {
@@ -17,6 +17,6 @@ export const useUsersStore = defineStore('users', {
     async getUserDetails(user: UserListItem) {
       const res = await api.get(`/user/${user.id}`)
       this.userDetails[user.id] = res.data as UserDetails
-    }
-  }
+    },
+  },
 })

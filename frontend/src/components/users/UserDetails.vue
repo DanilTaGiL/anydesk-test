@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { UserDetails } from '@/utils/types.ts'
+import type { UserDetails } from '@/utils/types/users.ts'
 
 const props = defineProps<{ details?: UserDetails }>()
 </script>

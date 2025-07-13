@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import UserList from '@/components/users/UserList.vue'
-import TaskList from '@/components/tasks/TaskList.vue'
+import TasksTable from '@/components/tasks/TasksTable.vue'
 </script>
 
 <template>
   <div class="home-view">
     <UserList/>
-    <TaskList/>
+    <TasksTable/>
   </div>
 </template>
 
@@ -16,5 +16,7 @@ import TaskList from '@/components/tasks/TaskList.vue'
   flex-direction: column;
   align-items: center;
   padding-top: 0.5rem;
+
+  gap: 1rem;
 }
 </style>

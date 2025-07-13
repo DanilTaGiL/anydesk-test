@@ -2,9 +2,17 @@
 import { useUsersStore } from '@/stores/users.ts'
 import { onMounted } from 'vue'
 import UserDetails from '@/components/users/UserDetails.vue'
-import type { UserListItem } from '@/utils/types.ts'
+import type { UserListItem, UserRole } from '@/utils/types/users.ts'
 
 const usersStore = useUsersStore()
+const roleColor: Record<UserRole, string> = {
+  ADMIN:     'deep-orange-darken-4',
+  SUPPORT:   'blue-darken-4',
+  DEVELOPER: 'green-darken-4',
+}
+
+const colorOf = (role: UserRole | string) =>
+  (roleColor as Record<string, string>)[role] ?? 'grey'
 
 const openDetailsHandler = async (user: UserListItem, isOpen: boolean) => {
   if (!isOpen) return
@@ -30,8 +38,12 @@ onMounted(async () => {
       >
         <v-expansion-panel-title>
           <div class="user-list-item--title">
-            <p><b>{{ user.fullName }}</b></p>
-            <v-chip color="orange-darken-4" variant="outlined" size="small" label>{{user.role}}</v-chip>
+            <p>
+              <b>{{ user.fullName }}</b>
+            </p>
+            <v-chip :color="colorOf(user.role)" variant="outlined" size="small" label>{{
+              user.role
+            }}</v-chip>
           </div>
         </v-expansion-panel-title>
 
@@ -64,6 +76,5 @@ onMounted(async () => {
   width: 90%;
   justify-content: space-between;
   align-items: center;
-
 }
 </style>
