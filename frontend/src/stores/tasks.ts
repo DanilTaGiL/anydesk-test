@@ -40,5 +40,17 @@ export const useTasksStore = defineStore('tasks', {
       }
       this.editor.open = false
     },
+
+    async createTask(details: TaskDetails) {
+      await api.post(`/task`, details)
+      this.editor.open = false
+      await this.getAllTasks()
+    },
+
+    async deleteTask(details: TaskDetails) {
+      await api.delete(`/task/${details.id}`)
+      this.editor.open = false
+      await this.getAllTasks()
+    }
   },
 })

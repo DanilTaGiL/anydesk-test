@@ -5,6 +5,7 @@ import BackgroundPanel from '@/components/common/BackgroundPanel.vue'
 import type { UserRole } from '@/utils/types/users.ts'
 import type { TaskCategory, TaskListItem } from '@/utils/types/tasks.ts'
 import TaskEditor from '@/components/tasks/TaskEditor.vue'
+import AddTaskButton from '@/components/tasks/AddTaskButton.vue'
 
 const tasksStore = useTasksStore()
 
@@ -25,8 +26,9 @@ const sortBy = [{ key: 'id' }]
 
 const handleClick = (event: any, row: any) => {
   const clickedItem = row.item as TaskListItem
-  tasksStore.editor.open = true
+  tasksStore.editor.mode = 'edit'
   tasksStore.getTaskDetails(clickedItem.id)
+  tasksStore.editor.open = true
 }
 
 onMounted(async () => {
@@ -36,7 +38,10 @@ onMounted(async () => {
 
 <template>
   <div class="tasks">
-    <h2 class="tasks--header">Task List</h2>
+    <div class="tasks--header">
+      <h2>Task List</h2>
+      <AddTaskButton />
+    </div>
 
     <BackgroundPanel>
       <v-data-table
@@ -79,6 +84,10 @@ onMounted(async () => {
 }
 
 .tasks--header {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
   padding-top: 0.5rem;
 }
 </style>

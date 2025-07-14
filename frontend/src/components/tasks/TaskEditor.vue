@@ -2,6 +2,8 @@
 import { useTasksStore } from '@/stores/tasks.ts'
 import { useUsersStore } from '@/stores/users.ts'
 import type { UserListItem } from '@/utils/types/users.ts'
+import type { TaskDetails } from '@/utils/types/tasks.ts'
+import ButtonWithConfirmation from '@/components/common/ButtonWithConfirmation.vue'
 
 const tasksStore = useTasksStore()
 const usersStore = useUsersStore()
@@ -10,6 +12,15 @@ const itemProps = (item: UserListItem) => {
   return {
     title: item.fullName,
     subtitle: item.role,
+  }
+}
+
+const save = async (details: TaskDetails) => {
+  if (tasksStore.editor.mode === 'edit') {
+    await tasksStore.updateTask(details)
+  }
+  if (tasksStore.editor.mode === 'create') {
+    await tasksStore.createTask(details)
   }
 }
 </script>
@@ -66,8 +77,15 @@ const itemProps = (item: UserListItem) => {
       <v-divider></v-divider>
 
       <v-card-actions class="bg-surface-light">
-        <v-btn v-if="tasksStore.editor.selected" @click="tasksStore.updateTask(tasksStore.editor.selected)" text="Save"></v-btn>
+        <v-btn v-if="tasksStore.editor.selected" @click="save(tasksStore.editor.selected)" text="Save"></v-btn>
         <v-spacer></v-spacer>
+        <ButtonWithConfirmation
+          v-if="tasksStore.editor.mode == 'edit'"
+          button-text="Delete"
+          button-color="error"
+          confirm-text="This task will be irrevocably deleted. Are you sure?"
+          :confirm-action="() => tasksStore.deleteTask(tasksStore.editor.selected!!)"
+        />
         <v-btn text="Cancel" variant="plain" @click="tasksStore.editor.open = false"></v-btn>
       </v-card-actions>
     </v-card>
