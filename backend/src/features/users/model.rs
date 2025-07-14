@@ -4,7 +4,7 @@ use utoipa::ToSchema;
 use uuid::Uuid;
 
 /* Database model */
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, Default, ToSchema)]
 pub struct UserDAO {
     pub id: Uuid,
     pub first_name: String,
@@ -14,7 +14,7 @@ pub struct UserDAO {
 }
 
 /* DTO models */
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct UserListItemDTO {
     pub id: Uuid,
@@ -33,14 +33,15 @@ pub struct UserDetailsDTO {
 }
 
 /* enums */
-#[derive(Serialize, Deserialize, ToSchema, Type)]
+#[derive(Serialize, Deserialize, Default, Debug, Clone, PartialEq, ToSchema, Type)]
 #[sqlx(type_name = "user_role")]
 #[sqlx(rename_all = "UPPERCASE")]
 #[serde(rename_all = "UPPERCASE")]
 pub enum UserRole {
-    ADMIN,
+    #[default]
     SUPPORT,
-    DEVELOPER
+    DEVELOPER,
+    ADMIN,
 }
 
 /* Converters */
