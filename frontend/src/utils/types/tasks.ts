@@ -3,6 +3,7 @@ export type TasksState = {
   taskDetails: {
     [id: number]: TaskDetails
   }
+  editor: TaskEditor
 }
 
 export type TaskCategory = 'BUG' | 'TASK' | 'RESEARCH'
@@ -13,12 +14,17 @@ export type TaskListItem = {
   category: TaskCategory
 }
 
-
 export type TaskDetails = {
   id: number
   title: string
   category: TaskCategory
-  description: string
   creatorId: string
-  assignedTo: string
+  description?: string
+  assignedTo?: string
+}
+
+export type TaskEditor = {
+  selected: TaskDetails | null,
+  open: boolean
+  mode: 'edit' | 'create'
 }

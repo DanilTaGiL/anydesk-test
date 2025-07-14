@@ -3,9 +3,11 @@ import { onMounted } from 'vue'
 import { useTasksStore } from '@/stores/tasks.ts'
 import BackgroundPanel from '@/components/common/BackgroundPanel.vue'
 import type { UserRole } from '@/utils/types/users.ts'
-import type { TaskCategory } from '@/utils/types/tasks.ts'
+import type { TaskCategory, TaskListItem } from '@/utils/types/tasks.ts'
+import TaskEditor from '@/components/tasks/TaskEditor.vue'
 
 const tasksStore = useTasksStore()
+
 const headers = [
   { title: '#', width: '1rem', align: 'end', key: 'id' },
   { title: 'Category', width: '5rem', align: 'start', key: 'category' },
@@ -19,6 +21,13 @@ const categoryColor: Record<TaskCategory, string> = {
 
 const colorOf = (role: UserRole | string) =>
   (categoryColor as Record<string, string>)[role] ?? 'grey'
+const sortBy = [{ key: 'id' }]
+
+const handleClick = (event: any, row: any) => {
+  const clickedItem = row.item as TaskListItem
+  tasksStore.editor.open = true
+  tasksStore.getTaskDetails(clickedItem.id)
+}
 
 onMounted(async () => {
   await tasksStore.getAllTasks()
@@ -31,10 +40,11 @@ onMounted(async () => {
 
     <BackgroundPanel>
       <v-data-table
+        @click:row="handleClick"
         :headers="headers as any"
         :items="tasksStore.tasksList"
         :loading="tasksStore.tasksList.length == 0"
-        hide-default-footer
+        :sort-by="sortBy"
         striped="even"
         density="comfortable"
       >
@@ -48,6 +58,8 @@ onMounted(async () => {
       </v-data-table>
     </BackgroundPanel>
   </div>
+
+  <TaskEditor />
 </template>
 
 <style scoped>

@@ -15,6 +15,8 @@ export const useUsersStore = defineStore('users', {
     },
 
     async getUserDetails(user: UserListItem) {
+      if (this.userDetails[user.id] != null) return
+
       const res = await api.get(`/user/${user.id}`)
       this.userDetails[user.id] = res.data as UserDetails
     },

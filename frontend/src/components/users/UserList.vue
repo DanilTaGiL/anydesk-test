@@ -6,20 +6,16 @@ import type { UserListItem, UserRole } from '@/utils/types/users.ts'
 
 const usersStore = useUsersStore()
 const roleColor: Record<UserRole, string> = {
-  ADMIN:     'deep-orange-darken-4',
-  SUPPORT:   'blue-darken-4',
+  ADMIN: 'deep-orange-darken-4',
+  SUPPORT: 'blue-darken-4',
   DEVELOPER: 'green-darken-4',
 }
 
-const colorOf = (role: UserRole | string) =>
-  (roleColor as Record<string, string>)[role] ?? 'grey'
+const colorOf = (role: UserRole | string) => (roleColor as Record<string, string>)[role] ?? 'grey'
 
 const openDetailsHandler = async (user: UserListItem, isOpen: boolean) => {
   if (!isOpen) return
-
-  if (usersStore.userDetails[user.id] == null) {
-    await usersStore.getUserDetails(user)
-  }
+  await usersStore.getUserDetails(user)
 }
 
 onMounted(async () => {
