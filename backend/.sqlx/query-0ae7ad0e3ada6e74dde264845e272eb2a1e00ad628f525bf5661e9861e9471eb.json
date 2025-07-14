@@ -1,0 +1,78 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        UPDATE tasks SET\n            title       = COALESCE($2, title),\n            category    = COALESCE($3, category),\n            description = COALESCE($4, description),\n            assigned_to = COALESCE($5, assigned_to)\n        WHERE id = $1\n        RETURNING id, title, category AS \"category: _\",\n                  description, creator_id, assigned_to\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "title",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "category: _",
+        "type_info": {
+          "Custom": {
+            "name": "task_category",
+            "kind": {
+              "Enum": [
+                "BUG",
+                "TASK",
+                "RESEARCH"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "description",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "creator_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 5,
+        "name": "assigned_to",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4",
+        "Text",
+        {
+          "Custom": {
+            "name": "task_category",
+            "kind": {
+              "Enum": [
+                "BUG",
+                "TASK",
+                "RESEARCH"
+              ]
+            }
+          }
+        },
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  "hash": "0ae7ad0e3ada6e74dde264845e272eb2a1e00ad628f525bf5661e9861e9471eb"
+}

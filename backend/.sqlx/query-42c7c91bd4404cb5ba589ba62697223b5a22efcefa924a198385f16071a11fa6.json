@@ -1,0 +1,78 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        INSERT INTO tasks (title, category, description, creator_id, assigned_to)\n        VALUES ($1, $2, $3, $4, $5)\n        RETURNING id, title, category AS \"category: _\", description, creator_id, assigned_to\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "title",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "category: _",
+        "type_info": {
+          "Custom": {
+            "name": "task_category",
+            "kind": {
+              "Enum": [
+                "BUG",
+                "TASK",
+                "RESEARCH"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "description",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "creator_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 5,
+        "name": "assigned_to",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        {
+          "Custom": {
+            "name": "task_category",
+            "kind": {
+              "Enum": [
+                "BUG",
+                "TASK",
+                "RESEARCH"
+              ]
+            }
+          }
+        },
+        "Text",
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  "hash": "42c7c91bd4404cb5ba589ba62697223b5a22efcefa924a198385f16071a11fa6"
+}
