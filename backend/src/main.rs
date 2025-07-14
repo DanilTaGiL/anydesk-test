@@ -30,7 +30,8 @@ async fn main() -> anyhow::Result<()> {
 
     /* routing */
     let cors = CorsLayer::new()
-        .allow_origin("http://localhost:5173".parse::<http::HeaderValue>().unwrap())
+        .allow_origin("http://localhost:5173".parse::<http::HeaderValue>()?)
+        .allow_origin("http://localhost".parse::<http::HeaderValue>()?)
         .allow_methods([Method::GET, Method::POST, Method::PUT, Method::PATCH, Method::DELETE])
         .allow_headers(Any);
 

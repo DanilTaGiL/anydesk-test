@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16.9
+    environment:
+      POSTGRES_DB: anydesk
+      POSTGRES_USER: anydesk
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    depends_on: [db]
+    env_file: .env
+    ports:
+      - "8888:8888"
+    command: ["./backend"]
+
+  frontend:
+    build: ./frontend
+    depends_on: [backend]
+    ports:
+      - "80:80"

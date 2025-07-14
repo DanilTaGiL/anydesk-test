@@ -8,7 +8,7 @@ RUN cargo fetch
 RUN cargo build --release
 
 # ---------- runtime ----------
-FROM debian:bookworm-slim
+FROM debian:12.11-slim
 WORKDIR /app
 ENV RUST_LOG=info
 COPY --from=builder /app/target/release/backend .
