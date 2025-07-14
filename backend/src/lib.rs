@@ -11,9 +11,12 @@ pub fn create_router(state: app_state::AppState) -> axum::Router {
     use tower_http::cors::{Any, CorsLayer};
     use crate::features::{tasks, users};
 
+    let origins = [
+        "http://localhost:5173".parse::<http::HeaderValue>().unwrap(),
+        "http://localhost".parse::<http::HeaderValue>().unwrap()
+    ];
     let cors = CorsLayer::new()
-        .allow_origin("http://localhost:5173".parse::<http::HeaderValue>().unwrap())
-        .allow_origin("http://localhost".parse::<http::HeaderValue>().unwrap())
+        .allow_origin(origins)
         .allow_methods([Method::GET, Method::POST, Method::PUT, Method::PATCH, Method::DELETE])
         .allow_headers(Any);
 
