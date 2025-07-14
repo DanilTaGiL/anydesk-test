@@ -77,8 +77,7 @@ const save = async (details: TaskDetails) => {
       <v-divider></v-divider>
 
       <v-card-actions class="bg-surface-light">
-        <v-btn v-if="tasksStore.editor.selected" @click="save(tasksStore.editor.selected)" text="Save"></v-btn>
-        <v-spacer></v-spacer>
+        <v-btn text="Cancel" variant="plain" @click="tasksStore.editor.open = false"></v-btn>
         <ButtonWithConfirmation
           v-if="tasksStore.editor.mode == 'edit'"
           button-text="Delete"
@@ -86,7 +85,8 @@ const save = async (details: TaskDetails) => {
           confirm-text="This task will be irrevocably deleted. Are you sure?"
           :confirm-action="() => tasksStore.deleteTask(tasksStore.editor.selected!!)"
         />
-        <v-btn text="Cancel" variant="plain" @click="tasksStore.editor.open = false"></v-btn>
+        <v-spacer></v-spacer>
+        <v-btn v-if="tasksStore.editor.selected" @click="save(tasksStore.editor.selected)" text="Save"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
