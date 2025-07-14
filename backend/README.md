@@ -29,4 +29,9 @@ or if you want to add new migration - `sqlx migrate add <MIGRATION_NAME>`
 cargo run
 ```
 
+### Run tests:
+```shell
+cargo test
+```
+
 
