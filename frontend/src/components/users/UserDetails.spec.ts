@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { mount } from '@vue/test-utils'
 import UserDetails from '@/components/users/UserDetails.vue'
-import { _userDetails } from '@/utils/testData.ts'
+import { fakeDetails } from '@/utils/testData.ts'
 
 const skeletonStub = { template: '<div class="fake-skeleton"></div>' }
 
@@ -18,7 +18,7 @@ describe('[COMPONENT] UserDetails', () => {
 
   it('Shows user data when props provided', () => {
     const wrapper = mount(UserDetails, {
-      props: { details: _userDetails },
+      props: { details: fakeDetails[2] },
       global: { stubs: { 'v-skeleton-loader': skeletonStub } },
     })
 
@@ -27,17 +27,16 @@ describe('[COMPONENT] UserDetails', () => {
     const detailsBlock = wrapper.find('.user-list-item--details')
     expect(detailsBlock.exists()).toBe(true)
 
-    expect(detailsBlock.text()).toContain(_userDetails.firstName)
-    expect(detailsBlock.text()).toContain(_userDetails.lastName)
-    expect(detailsBlock.text()).toContain(_userDetails.headline)
+    expect(detailsBlock.text()).toContain(fakeDetails[2].firstName)
+    expect(detailsBlock.text()).toContain(fakeDetails[2].lastName)
+    expect(detailsBlock.text()).toContain(fakeDetails[2].headline)
   })
 
   it('Show `Empty` when null headline', () => {
     const wrapper = mount(UserDetails, {
-      props: { details: {..._userDetails, headline: undefined } },
+      props: { details: fakeDetails[1] },
       global: { stubs: { 'v-skeleton-loader': skeletonStub } },
     })
-
 
     const detailsBlock = wrapper.find('.user-list-item--details')
     expect(detailsBlock.text()).toContain('Empty')
