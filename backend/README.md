@@ -34,4 +34,10 @@ cargo run
 cargo test
 ```
 
+### SQLx tips:
+After changes in any SQLx queries you should build and commit it
+```shell
+cargo sqlx prepare
+```
+
 

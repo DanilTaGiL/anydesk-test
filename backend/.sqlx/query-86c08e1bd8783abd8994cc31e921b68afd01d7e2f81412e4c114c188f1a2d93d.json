@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        SELECT id, first_name, last_name, headline, role AS \"role: _\"\n        FROM users\n        WHERE id = $1\n        ",
+  "query": "\n              SELECT id, first_name, last_name, headline, role AS \"role: _\"\n              FROM users\n              WHERE id = $1\n            ",
   "describe": {
     "columns": [
       {
@@ -53,5 +53,5 @@
       false
     ]
   },
-  "hash": "822b9250eb77600c3a6b1780deeaafa344e2f465cbe86690028b33f82aae8ed3"
+  "hash": "86c08e1bd8783abd8994cc31e921b68afd01d7e2f81412e4c114c188f1a2d93d"
 }

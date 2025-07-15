@@ -1,0 +1,63 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n                SELECT id, title, description, creator_id, assigned_to, category AS \"category: _\"\n                FROM tasks WHERE id = $1\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "title",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "description",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "creator_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 4,
+        "name": "assigned_to",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 5,
+        "name": "category: _",
+        "type_info": {
+          "Custom": {
+            "name": "task_category",
+            "kind": {
+              "Enum": [
+                "BUG",
+                "TASK",
+                "RESEARCH"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "fff3653750929afc74a35ed839488532334cdf62b518ec0058cb99ce61bf991e"
+}

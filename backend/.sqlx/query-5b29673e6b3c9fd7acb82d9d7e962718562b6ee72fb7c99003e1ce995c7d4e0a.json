@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        SELECT id, title, description, creator_id, assigned_to, category AS \"category: _\"\n        FROM tasks\n        WHERE id = $1\n        ",
+  "query": "\n                SELECT id, title, description, creator_id, assigned_to, category AS \"category: _\"\n                FROM tasks\n            ",
   "describe": {
     "columns": [
       {
@@ -46,9 +46,7 @@
       }
     ],
     "parameters": {
-      "Left": [
-        "Int4"
-      ]
+      "Left": []
     },
     "nullable": [
       false,
@@ -59,5 +57,5 @@
       false
     ]
   },
-  "hash": "cf6fbf1b9353ed0a099b17e9b30d2688ab2ee5e55a254f180e408c8f592aa507"
+  "hash": "5b29673e6b3c9fd7acb82d9d7e962718562b6ee72fb7c99003e1ce995c7d4e0a"
 }

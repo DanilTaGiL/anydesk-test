@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        UPDATE tasks SET\n            title       = COALESCE($2, title),\n            category    = COALESCE($3, category),\n            description = COALESCE($4, description),\n            assigned_to = COALESCE($5, assigned_to)\n        WHERE id = $1\n        RETURNING id, title, category AS \"category: _\",\n                  description, creator_id, assigned_to\n        ",
+  "query": "\n                UPDATE tasks SET\n                    title       = COALESCE($2, title),\n                    category    = COALESCE($3, category),\n                    description = COALESCE($4, description),\n                    assigned_to = COALESCE($5, assigned_to)\n                WHERE id = $1\n                RETURNING id, title, category AS \"category: _\", description, creator_id, assigned_to\n            ",
   "describe": {
     "columns": [
       {
@@ -74,5 +74,5 @@
       true
     ]
   },
-  "hash": "0ae7ad0e3ada6e74dde264845e272eb2a1e00ad628f525bf5661e9861e9471eb"
+  "hash": "c5d2d77611cef2d28ba1ac0efb3cefa1bd9f481a3919241952c339e84753ce88"
 }

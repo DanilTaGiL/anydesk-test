@@ -1,7 +1,7 @@
 # ---------- build ----------
 FROM rust:1.88-slim AS builder
 WORKDIR /app
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y curl pkg-config libssl-dev
 COPY . .
 ENV SQLX_OFFLINE true
 RUN cargo fetch
